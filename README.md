@@ -1,0 +1,2 @@
+# SEvaluator
+ Infix expressions evaluator

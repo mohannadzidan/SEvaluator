@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="sevaluator">
+    <output-path>$PROJECT_DIR$/out/artifacts/sevaluator</output-path>
+    <root id="archive" name="sevaluator.jar">
+      <element id="module-output" name="SEvaluator" />
+    </root>
+  </artifact>
+</component>
