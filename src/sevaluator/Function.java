@@ -1,25 +1,12 @@
 package sevaluator;
 
 
-public abstract class Function extends ExpressionComponent {
-    private String keyword;
+public interface Function extends ExpressionComponent {
 
-    public Function(String keyword) {
-        for (char c : keyword.toCharArray()) {
-            if (!Character.isLetter(c))
-                throw new RuntimeException("Illegal custom function name!");
-        }
-        this.keyword = keyword;
-    }
+    double apply(Evaluable value);
 
-    public abstract double apply(Evaluable value);
-
-    public String getKeyword() {
-        return keyword;
-    }
+    String getKeyword();
 
     @Override
-    public String toString() {
-        return keyword;
-    }
+    String toString();
 }

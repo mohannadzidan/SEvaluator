@@ -7,16 +7,6 @@ import sevaluator.exceptions.SyntaxErrorException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class Log extends Function {
-    public Log() {
-        super("log");
-    }
-
-    @Override
-    public double apply(Evaluable value) {
-        return Math.log(value.evaluate());
-    }
-}
 
 class SEvaluatorTesting {
     private static Evaluator evaluator;
@@ -24,10 +14,39 @@ class SEvaluatorTesting {
     @BeforeAll
     static void setup() {
 
-        evaluator = new Evaluator(new Function[]{
-                new Log()
+        evaluator = new Evaluator(Evaluator.Initialization.ALL);
+
+        double x = evaluator.evaluate("65.2 / 3 + 5 * 3 + (1 + 1 / sin(0.5 * 3.14))");
+
+        evaluator.addOperation(new Operation() {
+
+            @Override
+            public double apply(Evaluable lhs, Evaluable rhs) {
+                return lhs.evaluate() % rhs.evaluate();
+            }
+
+            @Override
+            public char getOperator() {
+                return '%';
+            }
+
+            @Override
+            public int getPriority() {
+                return '2'; // as same as division
+            }
         });
 
+        evaluator.addFunction(new Function() {
+            @Override
+            public double apply(Evaluable value) {
+                return Math.log(value.evaluate());
+            }
+
+            @Override
+            public String getKeyword() {
+                return "log";
+            }
+        });
 
     }
 

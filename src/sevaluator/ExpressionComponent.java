@@ -1,5 +1,5 @@
 package sevaluator;
 
-abstract class ExpressionComponent {
+interface ExpressionComponent {
 
 }

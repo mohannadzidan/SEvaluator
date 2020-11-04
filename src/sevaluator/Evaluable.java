@@ -1,6 +1,6 @@
 package sevaluator;
 
-public interface Evaluable {
+public interface Evaluable extends ExpressionComponent {
 
     double evaluate();
 }

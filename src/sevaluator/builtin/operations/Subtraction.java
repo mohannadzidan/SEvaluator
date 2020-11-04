@@ -3,13 +3,20 @@ package sevaluator.builtin.operations;
 import sevaluator.Evaluable;
 import sevaluator.Operation;
 
-public final class Subtraction extends Operation {
-    public Subtraction() {
-        super('-', 0);
-    }
+public final class Subtraction implements Operation {
 
     @Override
     public double apply(Evaluable lhs, Evaluable rhs) {
         return lhs.evaluate() - rhs.evaluate();
+    }
+
+    @Override
+    public char getOperator() {
+        return '-';
+    }
+
+    @Override
+    public int getPriority() {
+        return 0;
     }
 }

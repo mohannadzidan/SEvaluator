@@ -4,9 +4,12 @@ import sevaluator.builtin.functions.Cos;
 import sevaluator.builtin.functions.Sin;
 import sevaluator.builtin.functions.Tan;
 import sevaluator.builtin.operations.*;
+import sevaluator.exceptions.IllegalFormatException;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Evaluator {
-
 
     private final static Function[] builtinFunctions = {
             new Sin(),
@@ -21,45 +24,16 @@ public class Evaluator {
             new Power()
 
     };
-    private Operation[] operations;
-    private Function[] functions;
-
-
-    //////////////////////
-// public API
-//////////////////////
-    public Evaluator() {
-        operations = new Operation[builtinOperations.length];
-        functions = new Function[builtinFunctions.length];
-        initBuiltin();
-    }
-
-    public Evaluator(Operation[] customOperations) {
-        operations = new Operation[builtinOperations.length + customOperations.length];
-        functions = new Function[builtinFunctions.length];
-        initBuiltin();
-        System.arraycopy(customOperations, 0, operations, builtinOperations.length, customOperations.length);
-    }
-
-    public Evaluator(Function[] customFunctions) {
-        operations = new Operation[builtinOperations.length];
-        functions = new Function[builtinFunctions.length + customFunctions.length];
-        initBuiltin();
-        System.arraycopy(customFunctions, 0, functions, builtinFunctions.length, customFunctions.length);
-    }
-
-    public Evaluator(Operation[] customOperations, Function[] customFunctions) {
-        operations = new Operation[builtinOperations.length + customOperations.length];
-        functions = new Function[builtinFunctions.length + customFunctions.length];
-        initBuiltin();
-        System.arraycopy(customOperations, 0, operations, builtinOperations.length, customOperations.length);
-        System.arraycopy(customFunctions, 0, functions, builtinFunctions.length, customFunctions.length);
-
-    }
-
-    private void initBuiltin() {
-        System.arraycopy(builtinOperations, 0, operations, 0, builtinOperations.length);
-        System.arraycopy(builtinFunctions, 0, functions, 0, builtinFunctions.length);
+    private ArrayList<Operation> operations = new ArrayList<>();
+    private ArrayList<Function> functions = new ArrayList<>();
+    /*****************************************************************
+     ************************* public API ****************************
+     *****************************************************************/
+    public Evaluator(Initialization initializationType) {
+        if (initializationType == Initialization.FUNCTIONS_ONLY || initializationType == Initialization.ALL)
+            functions.addAll(Arrays.asList(builtinFunctions));
+        if (initializationType == Initialization.OPERATIONS_ONLY || initializationType == Initialization.ALL)
+            operations.addAll(Arrays.asList(builtinOperations));
     }
 
     Operation getOperation(char operator) {
@@ -76,6 +50,23 @@ public class Evaluator {
         return null;
     }
 
+    public void addFunction(Function function) {
+        // check
+        char[] chars = function.getKeyword().toCharArray();
+        for (char c : chars)
+            if (!Character.isLetter(c))
+                throw new IllegalFormatException("function keywords can only consist of letters!");
+        functions.add(function);
+    }
+
+    public void addOperation(Operation operation) {
+        // check
+        char op = operation.getOperator();
+        if (Character.isLetter(op) || Character.isDigit(op))
+            throw new IllegalFormatException("the operators can only be special characters!");
+        operations.add(operation);
+    }
+
     public double evaluate(String infix) {
         if (infix == null) return 0;
         infix = infix.replace(" ", "");
@@ -84,4 +75,7 @@ public class Evaluator {
         Expression.pack(e, this, infix, 0, infix.length() - 1);
         return e.evaluate();
     }
+
+
+    public enum Initialization {ALL, OPERATIONS_ONLY, FUNCTIONS_ONLY, NONE}
 }

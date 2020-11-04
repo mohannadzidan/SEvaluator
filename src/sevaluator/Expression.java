@@ -5,7 +5,7 @@ import sevaluator.exceptions.SyntaxErrorException;
 import java.util.ArrayList;
 import java.util.Collections;
 
-class Expression extends ExpressionComponent implements Evaluable {
+class Expression implements Evaluable {
     private ArrayList<ExpressionComponent> components = new ArrayList<>();
 
     public static int pack(Expression expression, Evaluator evaluator, String infix, int startIndex, int endIndex) {
@@ -135,7 +135,12 @@ class Expression extends ExpressionComponent implements Evaluable {
         StringBuilder value = new StringBuilder(50);
         value.append("(");
         for (ExpressionComponent ec : components) {
-            value.append(ec.toString());
+            if (ec instanceof Function)
+                value.append(((Function) ec).getKeyword());
+            else if (ec instanceof Operation)
+                value.append(((Operation) ec).getOperator());
+            else
+                value.append(ec.toString());
         }
         value.append(")");
         return value.toString();

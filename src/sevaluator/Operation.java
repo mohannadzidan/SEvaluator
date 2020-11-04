@@ -1,30 +1,13 @@
 package sevaluator;
 
 
-public abstract class Operation extends ExpressionComponent {
-    private char operator;
-    private int priority;
+public interface Operation extends ExpressionComponent {
 
-    protected Operation(char operator, int priority) {
-        if (Character.isLetter(operator) || Character.isDigit(operator))
-            throw new RuntimeException("Illegal custom operator symbol!");
-        this.operator = operator;
-        this.priority = priority;
-    }
+    //        if (Character.isLetter(operator) || Character.isDigit(operator) || operator == ' ')
+//            throw new RuntimeException("Illegal operator, the operators can only be special characters!");
+    double apply(Evaluable lhs, Evaluable rhs);
 
-    public abstract double apply(Evaluable lhs, Evaluable rhs);
+    char getOperator();
 
-
-    public char getOperator() {
-        return operator;
-    }
-
-    public int getPriority() {
-        return priority;
-    }
-
-    @Override
-    public String toString() {
-        return Character.toString(operator);
-    }
+    int getPriority();
 }

@@ -1,6 +1,6 @@
 package sevaluator;
 
-class Value extends ExpressionComponent implements Evaluable {
+class Value implements Evaluable {
 
     private double value;
 
