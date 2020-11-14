@@ -52,7 +52,7 @@ evaluator.addOperation(new Operation() {
 
     @Override
     public int getPriority() {
-        return '2'; // as same as division
+        return 2; // as same as division
     }
 });
 ```
